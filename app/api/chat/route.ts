@@ -1,13 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
   const { userInput } = req.body;
 
   const response = await fetch(
-    "https://api.openai.com/v1/engines/davinci-codex/completions",
+    "https://api.openai.com/v1/engines/text-davinci-003/completions",
     {
       method: "POST",
       headers: {
@@ -22,5 +19,8 @@ export default async function handler(
   );
 
   const data = await response.json();
-  res.status(200).json({ answer: data.choices[0].text });
+
+  return new Response(JSON.stringify({ answer: data.choices[0].text }), {
+    status: 200,
+  });
 }
